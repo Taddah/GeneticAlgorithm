@@ -3,6 +3,11 @@ package modeles;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Une population est une liste d'individu
+ * Cette classe permet de gérer cette liste
+ *
+ */
 public class Population {
 	
 	private int mPopulationSize;
@@ -15,12 +20,17 @@ public class Population {
 		//Constuire la population
 		for(int i = 0; i < this.mPopulationSize; i++) {
 			
-			Individu newIndividu = individu.generate();
+			Individu newIndividu = individu.genererIndividu();
 			mIndividus.add(newIndividu);
 		}
 		
 	}
 	
+	/**
+	 * Permet de savoir si la population est suffisamment diversifié
+	 * (c'est à dire au moins 2/3 des individus sont différets)
+	 * @return boolean
+	 */
 	public boolean isPopulationDiversified() {
 		int sameIndividu = 0;
 		
@@ -28,7 +38,6 @@ public class Population {
 			if(this.mIndividus.get(i).equals(this.mIndividus.get(i+1))) sameIndividu++;;
 		}
 		
-		System.out.println("Same individu = " + sameIndividu);
 		if(sameIndividu > (this.mPopulationSize / 3)) return false;
 		
 		return true;
@@ -46,7 +55,7 @@ public class Population {
 		return this.mIndividus;
 	}
 	
-	public void replacerIndividu(Individu oldIndividu, Individu newIndividu) {
+	public void remplacerIndividu(Individu oldIndividu, Individu newIndividu) {
 		if(!this.mIndividus.contains(oldIndividu)) {
 			try {
 				throw new Exception("Erreur : impossible de remplacer l'individu (inexistant");
@@ -60,10 +69,14 @@ public class Population {
 		this.mIndividus.add(newIndividu);
 	}
 	
+	/**
+	 * Retourne le meilleur individu de la population en fonction de sa fitness
+	 * @return Individu
+	 */
 	public Individu getTopIndividu() {
 		Individu topIndividu = this.getIndividus().get(0);
 		for(Individu ind : this.getIndividus()) {
-			if(ind.getFittest() > topIndividu.getFittest()) {
+			if(ind.getFitness() > topIndividu.getFitness()) {
 				topIndividu = ind;
 			}
 		}
@@ -77,6 +90,9 @@ public class Population {
 		Population pop = (Population) obj;
 		
 		if(pop.getPopulationSize() != this.getPopulationSize()) return false;
+		
+		if(pop.getTopIndividu() != this.getTopIndividu()) return false;
+		
 		for(int i = 0; i < this.getPopulationSize(); i++) {
 			if(!this.getIndividu(i).equals(pop.getIndividu(i))) return false;
 		}

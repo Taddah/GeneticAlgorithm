@@ -8,7 +8,12 @@ public class TestRunner {
 
 	public static void main(String[] args) {	
 
-		Result result = JUnitCore.runClasses(PopulationGenerationTest.class);					
+		Result result = JUnitCore.runClasses(
+				CritereDureeTest.class, 
+				PopulationGenerationTest.class,
+				CritereNombreIterationTest.class,
+				AlgorithmeGenetiqueTest.class);	
+		
 		for (Failure failure : result.getFailures()) {							
 			System.out.println(failure.toString());	
 		}

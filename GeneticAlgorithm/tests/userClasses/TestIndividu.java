@@ -5,7 +5,7 @@ import java.util.Vector;
 
 import modeles.Individu;
 
-public class TestIndividu extends Individu {
+public class TestIndividu implements Individu {
 	
 	private Random rand;
 	private Vector<Integer> ind;
@@ -18,10 +18,10 @@ public class TestIndividu extends Individu {
 	}
 
 	@Override
-	public Individu generate() {
+	public Individu genererIndividu() {
 		TestIndividu ti = new TestIndividu();
-		ti.addToInd(rand.nextInt(99999));
-		ti.addToInd(rand.nextInt(99999));
+		ti.addToInd(rand.nextInt(2000));
+		ti.addToInd(rand.nextInt(2000));
 		return ti;
 	}
 
@@ -56,7 +56,7 @@ public class TestIndividu extends Individu {
 	}
 
 	@Override
-	public int getFittest() {
+	public int getFitness() {
 		return this.mFittest;
 	}
 
@@ -71,9 +71,13 @@ public class TestIndividu extends Individu {
 
 	@Override
 	public void mutation() {
+		/*
 		int temp = this.getInd().get(0);
 		this.getInd().set(0, this.getInd().get(1));
 		this.getInd().set(1, temp);
+		*/
+		this.getInd().set(1, rand.nextInt(999));
+		this.getInd().set(0, rand.nextInt(999));
 	}
 	
 	@Override

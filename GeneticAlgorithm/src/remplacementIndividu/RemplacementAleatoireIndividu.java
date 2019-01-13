@@ -6,6 +6,11 @@ import java.util.Random;
 import modeles.Individu;
 import modeles.Population;
 
+/**
+ * Retourne de manière aléatoire l'individu qui sera remplacé
+ * Le meilleur individu ne peut être remplacé
+ *
+ */
 public class RemplacementAleatoireIndividu implements IRemplacementIndividu {
 
 	@Override

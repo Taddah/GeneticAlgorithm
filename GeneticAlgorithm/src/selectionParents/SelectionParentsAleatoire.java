@@ -7,6 +7,9 @@ import java.util.Random;
 import modeles.Individu;
 import modeles.Population;
 
+/*
+ * La sélection des parents se fera au hasard dans la population fournie
+ */
 public class SelectionParentsAleatoire implements ISelectionParents {
 
 	private int mNombreEnfants;
@@ -35,6 +38,12 @@ public class SelectionParentsAleatoire implements ISelectionParents {
 	@Override 
 	public int getNombreEnfant() {
 		return this.mNombreEnfants;
+	}
+
+	@Override
+	public void setNombreEnfant(int nbEnfant) {
+		this.mNombreEnfants = nbEnfant;
+		
 	}
 
 }

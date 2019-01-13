@@ -3,33 +3,35 @@ package critereArret;
 import modeles.Individu;
 import modeles.Population;
 
+/**
+ * Arrête l'algorithme quand le meilleur individu reste identique durant le nombre d'itération spécifié
+ *
+ */
 public class ArretMeilleurIndividuReste implements ICritereArret {
 
 	private Individu currentBestIndividu;
 	private int mIterationMax;
 	private int mCurrentIteration;
-	
+
 	public ArretMeilleurIndividuReste(int maxIteration) {
 		this.mIterationMax = maxIteration;
 	}
-	
+
 	@Override
 	public boolean algorithmShouldStop(Population population) {
-		
+
 		Individu newBestIndividu = population.getTopIndividu();
-		System.out.println("DEBUG ARREt : " + this.mCurrentIteration);
-		
+
 		if(this.currentBestIndividu == null) {
 			currentBestIndividu = newBestIndividu;
 			return false;
 		}
-		
-		if(currentBestIndividu.getFittest() < newBestIndividu.getFittest()) {
+
+		if(currentBestIndividu.getFitness() < newBestIndividu.getFitness()) {
 			currentBestIndividu = newBestIndividu;
 		}
 		else {
-			if(this.currentBestIndividu.getFittest() == newBestIndividu.getFittest()) {
-				System.out.println("SAME");
+			if(this.currentBestIndividu.getFitness() == newBestIndividu.getFitness()) {
 				this.mCurrentIteration++;
 				if(this.mCurrentIteration >= this.mIterationMax) {
 					return true;
@@ -40,6 +42,11 @@ public class ArretMeilleurIndividuReste implements ICritereArret {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public ICritereArret clone()  {
+		return new ArretMeilleurIndividuReste(this.mIterationMax);
 	}
 
 }
