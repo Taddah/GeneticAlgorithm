@@ -1,6 +1,6 @@
 package selectionParents;
 
-import modeles.Individu;
+import modeles.IIndividu;
 import modeles.Population;
 
 /**
@@ -15,7 +15,7 @@ public interface ISelectionParents {
 	 * @param Population dans laquelle effectuer la sélection
 	 * @return Array d'individu
 	 */
-	Individu[] selectionnerParents(Population p);
+	IIndividu[] selectionnerParents(Population p);
 	
 	int getNombreEnfant();
 	void setNombreEnfant(int nbEnfant);

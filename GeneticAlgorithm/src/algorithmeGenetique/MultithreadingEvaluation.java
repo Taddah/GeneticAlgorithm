@@ -1,6 +1,6 @@
 package algorithmeGenetique;
 
-import modeles.Individu;
+import modeles.IIndividu;
 
 /**
  * Implémentation de Runnable
@@ -10,9 +10,9 @@ import modeles.Individu;
  */
 public class MultithreadingEvaluation implements Runnable {
 	
-	private Individu individu;
+	private IIndividu individu;
 	
-	public MultithreadingEvaluation(Individu individu) {
+	public MultithreadingEvaluation(IIndividu individu) {
 		this.individu = individu;
 	}
 

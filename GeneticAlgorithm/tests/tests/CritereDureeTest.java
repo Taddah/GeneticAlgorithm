@@ -8,7 +8,7 @@ import algorithmeGenetique.AlgorithmeGenetique;
 import algorithmeGenetique.MultithradingAlgorithmeGenetique;
 import critereArret.ArretDuree;
 import critereArret.ICritereArret;
-import modeles.Individu;
+import modeles.IIndividu;
 import modeles.Resultat;
 import remplacementIndividu.IRemplacementIndividu;
 import remplacementIndividu.RemplacementMoindreIndividu;
@@ -24,7 +24,7 @@ public class CritereDureeTest {
 
 	@Test
 	public void testAlgorithmeArretSeconde() {
-		Individu ind = new TestIndividu();
+		IIndividu ind = new TestIndividu();
 		ISelectionParents selectionParent = new SelectionParentsMeilleurs(30);
 		IRemplacementIndividu remplacementIndividu = new RemplacementMoindreIndividu();
 		ICritereArret critereArret = new ArretDuree(3);

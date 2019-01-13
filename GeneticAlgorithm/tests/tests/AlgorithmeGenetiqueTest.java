@@ -9,9 +9,12 @@ import org.junit.Test;
 
 import algorithmeGenetique.AlgorithmeGenetique;
 import algorithmeGenetique.MultithradingAlgorithmeGenetique;
+import critereArret.ArretDuree;
 import critereArret.ArretEvolutionPopulation;
+import critereArret.ArretIteration;
+import critereArret.ArretMeilleurIndividuReste;
 import critereArret.ICritereArret;
-import modeles.Individu;
+import modeles.IIndividu;
 import modeles.Resultat;
 import remplacementIndividu.IRemplacementIndividu;
 import remplacementIndividu.RemplacementMoindreIndividu;
@@ -25,16 +28,17 @@ public class AlgorithmeGenetiqueTest {
 	public void test() {
 		Logger logger = Logger.getLogger("logger");
 
-		logger.log(Level.INFO, "Lancement du main");
-
-		Individu ind = new TestIndividu();
-		ISelectionParents selectionParent = new SelectionParentsMeilleurs(10);
+		IIndividu ind = new TestIndividu();
+		ISelectionParents selectionParent = new SelectionParentsMeilleurs(9);
 		IRemplacementIndividu remplacementIndividu = new RemplacementMoindreIndividu();
-		ICritereArret critereArret = new ArretEvolutionPopulation(2000);
+		ICritereArret critereArret = new ArretIteration(1);
 
-		AlgorithmeGenetique ag = new AlgorithmeGenetique(50, ind, selectionParent, remplacementIndividu, critereArret);
+		AlgorithmeGenetique ag = new AlgorithmeGenetique(10, ind, selectionParent, remplacementIndividu, critereArret);
+		ag.setNombreThreadEvaluation(5);
 
-		MultithradingAlgorithmeGenetique mag = new MultithradingAlgorithmeGenetique(3, ag);
+		MultithradingAlgorithmeGenetique mag = new MultithradingAlgorithmeGenetique(1, ag);
+		
+		logger.log(Level.INFO, "Démarrage des algorithmes");
 		Resultat res = mag.startThreads();
 
 		logger.log(Level.INFO, "Résultat");
@@ -42,6 +46,7 @@ public class AlgorithmeGenetiqueTest {
 		System.out.println("Meilleure évaluation : " + res.getEvaluation());
 		System.out.println("Nombre d'itération : " + res.getNombreIteration());
 		System.out.println("Temps d'exécution (s) : " + res.getTempsExecution());
+		logger.log(Level.INFO, "-----------------------------------");
 		
 		assertEquals(true, true, "null");
 	}

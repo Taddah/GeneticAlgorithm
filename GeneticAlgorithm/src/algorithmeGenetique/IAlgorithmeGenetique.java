@@ -3,10 +3,15 @@ package algorithmeGenetique;
 import java.util.concurrent.Callable;
 
 import critereArret.ICritereArret;
-import modeles.Individu;
+import modeles.IIndividu;
 import modeles.Population;
 
-public interface IAlgorithmeGenetique extends Callable<Individu>, Cloneable {
+/**
+ * Template pour l'algorithme génétique
+ * Implémentation du design pattern Prototype afin de pouvoir cloner l'algorithme
+ *
+ */
+public interface IAlgorithmeGenetique extends Callable<IIndividu>, Cloneable {
 
 	/**
 	 * Fais une itération sur population
@@ -20,7 +25,7 @@ public interface IAlgorithmeGenetique extends Callable<Individu>, Cloneable {
 	 * 
 	 * @param newIndividu Individu à insérer dans la population
 	 */
-	void remplacerIndividu(Individu newIndividu);
+	void remplacerIndividu(IIndividu newIndividu);
 	
 	/**
 	 * 
@@ -45,7 +50,7 @@ public interface IAlgorithmeGenetique extends Callable<Individu>, Cloneable {
 	 * Permet de faire tourner plusieurs algorithme en même temps avec échange des meilleurs individus à chaque itération
 	 */
 	@Override 
-	default Individu call() throws Exception {
+	default IIndividu call() throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}

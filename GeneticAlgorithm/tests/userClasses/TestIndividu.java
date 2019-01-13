@@ -3,9 +3,9 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.Vector;
 
-import modeles.Individu;
+import modeles.IIndividu;
 
-public class TestIndividu implements Individu {
+public class TestIndividu implements IIndividu {
 	
 	private Random rand;
 	private Vector<Integer> ind;
@@ -18,15 +18,15 @@ public class TestIndividu implements Individu {
 	}
 
 	@Override
-	public Individu genererIndividu() {
+	public IIndividu genererIndividu() {
 		TestIndividu ti = new TestIndividu();
-		ti.addToInd(rand.nextInt(2000));
-		ti.addToInd(rand.nextInt(2000));
+		ti.addToInd(rand.nextInt(5000000));
+		ti.addToInd(rand.nextInt(5000000));
 		return ti;
 	}
 
 	@Override
-	public boolean equals(Individu otherIndividu) {
+	public boolean equals(IIndividu otherIndividu) {
 		
 		if(otherIndividu instanceof TestIndividu) {
 			TestIndividu ind2 = (TestIndividu) otherIndividu;
@@ -61,7 +61,7 @@ public class TestIndividu implements Individu {
 	}
 
 	@Override
-	public Individu croisement(Individu otherParent) {
+	public IIndividu croisement(IIndividu otherParent) {
 		TestIndividu newInd = new TestIndividu();
 		newInd.addToInd(Math.max(this.getInd().get(0), ((TestIndividu) otherParent).getInd().get(0)));
 		newInd.addToInd(Math.min(this.getInd().get(1), ((TestIndividu) otherParent).getInd().get(1)));

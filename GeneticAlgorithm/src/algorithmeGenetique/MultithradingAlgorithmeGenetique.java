@@ -9,7 +9,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import critereArret.ArretDuree;
-import modeles.Individu;
+import modeles.IIndividu;
 import modeles.Resultat;
 
 /**
@@ -34,14 +34,17 @@ public class MultithradingAlgorithmeGenetique {
 		long tempsDebut = System.currentTimeMillis();
 		
 		//1. Création des algorithmes
-		List<Callable<Individu>> workers = new ArrayList<>();
+		List<Callable<IIndividu>> workers = new ArrayList<>();
 		for(int i = 0; i < this.mNombreThread; i++) {
 			try {
-				Callable<Individu> worker = this.mAlgorithme.clone();
+				Callable<IIndividu> worker = this.mAlgorithme.clone();
+				
+				//Démarrer le compteur de temps si le critère d'arrêt est sur la durée
 				if (((AlgorithmeGenetique) worker).getCritereArret() instanceof ArretDuree) {
 					AlgorithmeGenetique ag = ((AlgorithmeGenetique) worker);
 					((ArretDuree) ag.getCritereArret()).startCompteur();
 				}
+				
 				workers.add(worker);
 			} catch (CloneNotSupportedException e) {
 				e.printStackTrace();
@@ -53,12 +56,12 @@ public class MultithradingAlgorithmeGenetique {
 		//des itérations dans ceux encore en exécutions
 		ExecutorService executor = Executors.newFixedThreadPool(this.mNombreThread);
 		while(!AllAlgorithmHasFInished(workers)) {
-			Individu topInd = null;
-			Callable<Individu> topAG = null;
+			IIndividu topInd = null;
+			Callable<IIndividu> topAG = null;
 			for (int i = 0; i < this.mNombreThread; i++) {
 				
 				if(((AlgorithmeGenetique) workers.get(i)).isRunning()){
-					Future<Individu> ind = executor.submit(workers.get(i));
+					Future<IIndividu> ind = executor.submit(workers.get(i));
 
 					try {
 						if(topInd == null || ind.get().getFitness() > topInd.getFitness()) {
@@ -73,7 +76,7 @@ public class MultithradingAlgorithmeGenetique {
 			}
 
 			//Partage du meilleur individu issue des algorithmes entre tous les algorithmes
-			for(Callable<Individu> ag : workers) {
+			for(Callable<IIndividu> ag : workers) {
 				if(ag != topAG) {
 					((AlgorithmeGenetique) ag).remplacerIndividu(topInd);
 				}
@@ -88,7 +91,7 @@ public class MultithradingAlgorithmeGenetique {
 		//On récupère la meilleure solution et les différentes données et on les retourne
 		// à l'utilisateur
 		long tpsExecution = System.currentTimeMillis() - tempsDebut;
-		Individu solution = getSolution(workers);
+		IIndividu solution = getSolution(workers);
 		int evaluation = solution.getFitness();
 		int nombreIteration = getMaxIteration(workers);
 		
@@ -100,8 +103,8 @@ public class MultithradingAlgorithmeGenetique {
 	 * @param algos Liste des algorithmes génétiques
 	 * @return boolean
 	 */
-	private boolean AllAlgorithmHasFInished(List<Callable<Individu>> algos) {
-		for(Callable<Individu> ag : algos) if(((AlgorithmeGenetique) ag).isRunning()) {
+	private boolean AllAlgorithmHasFInished(List<Callable<IIndividu>> algos) {
+		for(Callable<IIndividu> ag : algos) if(((AlgorithmeGenetique) ag).isRunning()) {
 			return false;
 		}
 
@@ -113,11 +116,11 @@ public class MultithradingAlgorithmeGenetique {
 	 * @param workers Liste des algorithmes
 	 * @return meilleur Individu
 	 */
-	private Individu getSolution(List<Callable<Individu>> workers) {
-		Individu solution = null;
+	private IIndividu getSolution(List<Callable<IIndividu>> workers) {
+		IIndividu solution = null;
 		
-		for(Callable<Individu> ag : workers) {
-			Individu topInd = ((AlgorithmeGenetique) ag).getPopulation().getTopIndividu();
+		for(Callable<IIndividu> ag : workers) {
+			IIndividu topInd = ((AlgorithmeGenetique) ag).getPopulation().getTopIndividu();
 			if(solution == null || solution.getFitness() < topInd.getFitness()) {
 				solution = topInd;
 			}
@@ -131,10 +134,10 @@ public class MultithradingAlgorithmeGenetique {
 	 * @param workers Liste des algorithmes
 	 * @return nombre d'itération
 	 */
-	private int getMaxIteration(List<Callable<Individu>> workers) {
+	private int getMaxIteration(List<Callable<IIndividu>> workers) {
 		int maxIteration = 0;
 		
-		for(Callable<Individu> ag : workers) {
+		for(Callable<IIndividu> ag : workers) {
 			if(maxIteration < ((AlgorithmeGenetique) ag).getNombreIteration()) {
 				maxIteration = ((AlgorithmeGenetique) ag).getNombreIteration();
 			}

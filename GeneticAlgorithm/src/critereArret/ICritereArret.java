@@ -2,7 +2,7 @@ package critereArret;
 
 import modeles.Population;
 
-/** ICritereArret Design pattern Strategy + extension de Cloneable pour permettre de cloner la classe en cas de 
+/** ICritereArret Design pattern Strategy + Prototype pour permettre de cloner la classe en cas de 
  *  multithreading sur l'algorithme genetique
  *
  */

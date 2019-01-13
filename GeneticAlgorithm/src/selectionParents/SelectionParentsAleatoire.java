@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import modeles.Individu;
+import modeles.IIndividu;
 import modeles.Population;
 
 /*
@@ -19,12 +19,12 @@ public class SelectionParentsAleatoire implements ISelectionParents {
 	}
 	
 	@Override
-	public Individu[] selectionnerParents(Population p) {
+	public IIndividu[] selectionnerParents(Population p) {
 		
 		
-		Individu[] parents = new Individu[mNombreEnfants + 1];
+		IIndividu[] parents = new IIndividu[mNombreEnfants + 1];
 		Random rand = new Random();
-		List<Individu> populationCopy = new ArrayList<>(p.getIndividus());
+		List<IIndividu> populationCopy = new ArrayList<>(p.getIndividus());
 		
 		for(int i = 0; i < mNombreEnfants + 1; i++) {
 			int individuSelected = rand.nextInt(populationCopy.size());

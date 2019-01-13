@@ -1,6 +1,6 @@
 package remplacementIndividu;
 
-import modeles.Individu;
+import modeles.IIndividu;
 import modeles.Population;
 
 /**
@@ -15,5 +15,5 @@ public interface IRemplacementIndividu {
 	 * @param population
 	 * @return Individu qui sera à remplacer
 	 */
-	Individu getIndividuARemplacer(Population pop);
+	IIndividu getIndividuARemplacer(Population pop);
 }

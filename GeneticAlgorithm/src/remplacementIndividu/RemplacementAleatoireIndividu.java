@@ -3,7 +3,7 @@ package remplacementIndividu;
 import java.util.ArrayList;
 import java.util.Random;
 
-import modeles.Individu;
+import modeles.IIndividu;
 import modeles.Population;
 
 /**
@@ -14,13 +14,13 @@ import modeles.Population;
 public class RemplacementAleatoireIndividu implements IRemplacementIndividu {
 
 	@Override
-	public Individu getIndividuARemplacer(Population pop) {
-		Individu topInd = pop.getTopIndividu();
-		ArrayList<Individu> copyPopulation = new ArrayList<>(pop.getIndividus());
+	public IIndividu getIndividuARemplacer(Population pop) {
+		IIndividu topInd = pop.getTopIndividu();
+		ArrayList<IIndividu> copyPopulation = new ArrayList<>(pop.getIndividus());
 		copyPopulation.remove(topInd);
 		
 		Random rand = new Random();
-		Individu individu = copyPopulation.get(rand.nextInt(copyPopulation.size()));	
+		IIndividu individu = copyPopulation.get(rand.nextInt(copyPopulation.size()));	
 		
 		return individu;
 	}

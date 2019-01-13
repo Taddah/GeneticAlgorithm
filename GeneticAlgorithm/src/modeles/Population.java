@@ -11,16 +11,16 @@ import java.util.List;
 public class Population {
 	
 	private int mPopulationSize;
-	private List<Individu> mIndividus;
+	private List<IIndividu> mIndividus;
 
-	public Population(int populationSize, Individu individu) {
+	public Population(int populationSize, IIndividu individu) {
 		this.mPopulationSize = populationSize;
 		this.mIndividus = new ArrayList<>();
 		
 		//Constuire la population
 		for(int i = 0; i < this.mPopulationSize; i++) {
 			
-			Individu newIndividu = individu.genererIndividu();
+			IIndividu newIndividu = individu.genererIndividu();
 			mIndividus.add(newIndividu);
 		}
 		
@@ -43,7 +43,7 @@ public class Population {
 		return true;
 	}
 
-	public Individu getIndividu(int index) {
+	public IIndividu getIndividu(int index) {
 		return this.mIndividus.get(index);
 	}
 	
@@ -51,11 +51,11 @@ public class Population {
 		return this.mPopulationSize;
 	}
 
-	public List<Individu> getIndividus() {
+	public List<IIndividu> getIndividus() {
 		return this.mIndividus;
 	}
 	
-	public void remplacerIndividu(Individu oldIndividu, Individu newIndividu) {
+	public void remplacerIndividu(IIndividu oldIndividu, IIndividu newIndividu) {
 		if(!this.mIndividus.contains(oldIndividu)) {
 			try {
 				throw new Exception("Erreur : impossible de remplacer l'individu (inexistant");
@@ -73,9 +73,9 @@ public class Population {
 	 * Retourne le meilleur individu de la population en fonction de sa fitness
 	 * @return Individu
 	 */
-	public Individu getTopIndividu() {
-		Individu topIndividu = this.getIndividus().get(0);
-		for(Individu ind : this.getIndividus()) {
+	public IIndividu getTopIndividu() {
+		IIndividu topIndividu = this.getIndividus().get(0);
+		for(IIndividu ind : this.getIndividus()) {
 			if(ind.getFitness() > topIndividu.getFitness()) {
 				topIndividu = ind;
 			}

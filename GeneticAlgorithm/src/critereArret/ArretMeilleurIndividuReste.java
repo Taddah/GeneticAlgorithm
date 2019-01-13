@@ -1,6 +1,6 @@
 package critereArret;
 
-import modeles.Individu;
+import modeles.IIndividu;
 import modeles.Population;
 
 /**
@@ -9,7 +9,7 @@ import modeles.Population;
  */
 public class ArretMeilleurIndividuReste implements ICritereArret {
 
-	private Individu currentBestIndividu;
+	private IIndividu currentBestIndividu;
 	private int mIterationMax;
 	private int mCurrentIteration;
 
@@ -20,7 +20,7 @@ public class ArretMeilleurIndividuReste implements ICritereArret {
 	@Override
 	public boolean algorithmShouldStop(Population population) {
 
-		Individu newBestIndividu = population.getTopIndividu();
+		IIndividu newBestIndividu = population.getTopIndividu();
 
 		if(this.currentBestIndividu == null) {
 			currentBestIndividu = newBestIndividu;

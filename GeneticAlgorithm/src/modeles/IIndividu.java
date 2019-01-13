@@ -4,20 +4,20 @@ package modeles;
  * 
  *
  */
-public interface Individu {
+public interface IIndividu {
 	
 	/** 
 	 * Permet de spécifier la méthode utilisé pour générer un nouveau Individu
 	 * @return Nouveau Individu
 	 */
-	public abstract Individu genererIndividu();
+	public abstract IIndividu genererIndividu();
 	
 	/**
 	 * Comparaison d'individu
 	 * @param otherIndividu Individu à comparer
 	 * @return true si individu identique
 	 */
-	public abstract boolean equals(Individu otherIndividu);
+	public abstract boolean equals(IIndividu otherIndividu);
 	
 	/**
 	 * Méthode d'évaluation de l'individu (calcul de la fitness
@@ -35,7 +35,7 @@ public interface Individu {
 	 * @param otherParent Individu utilisé pour le croisement
 	 * @return Nouveau Individu
 	 */
-	public abstract Individu croisement(Individu otherParent);
+	public abstract IIndividu croisement(IIndividu otherParent);
 	
 	/**
 	 * Mutation de l'individu

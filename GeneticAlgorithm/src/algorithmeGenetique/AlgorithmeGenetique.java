@@ -9,7 +9,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import critereArret.ICritereArret;
-import modeles.Individu;
+import modeles.IIndividu;
 import modeles.Population;
 import remplacementIndividu.IRemplacementIndividu;
 import selectionParents.ISelectionParents;
@@ -33,7 +33,7 @@ public class AlgorithmeGenetique implements IAlgorithmeGenetique {
 	public static int NOMBRE_THREAD_EVALUATION = 1;
 
 	private int taillePopulation;
-	private Individu individu;
+	private IIndividu individu;
 	private ISelectionParents selectionParent;
 	private IRemplacementIndividu remplacementIndividu;
 	private ICritereArret critereArret;
@@ -42,7 +42,7 @@ public class AlgorithmeGenetique implements IAlgorithmeGenetique {
 	private Population population;
 	private boolean algorithmIsRunning;
 
-	public AlgorithmeGenetique(int taillePopulation, Individu ind, ISelectionParents selectionParents, IRemplacementIndividu remplacementIndividu, ICritereArret critereArret) {
+	public AlgorithmeGenetique(int taillePopulation, IIndividu ind, ISelectionParents selectionParents, IRemplacementIndividu remplacementIndividu, ICritereArret critereArret) {
 		this.taillePopulation = taillePopulation;
 		this.individu = ind;
 		this.selectionParent = selectionParents;
@@ -99,7 +99,7 @@ public class AlgorithmeGenetique implements IAlgorithmeGenetique {
 		//2 Evaluer chaque individu (partagé entre plusieurs thread)
 		ExecutorService exec = Executors.newFixedThreadPool(NOMBRE_THREAD_EVALUATION);
 		List<Future<?>> futures = new ArrayList<Future<?>>(population.getPopulationSize());
-		for (Individu item : population.getIndividus()) {
+		for (IIndividu item : population.getIndividus()) {
 			futures.add(exec.submit(new MultithreadingEvaluation(item)));
 		}
 		for (Future<?> f : futures) {
@@ -116,16 +116,16 @@ public class AlgorithmeGenetique implements IAlgorithmeGenetique {
 		exec.shutdown();
 
 		//3 Selection des meilleurs parents
-		Individu[] parents = this.selectionParent.selectionnerParents(population);
+		IIndividu[] parents = this.selectionParent.selectionnerParents(population);
 
 
 		//4 Croisement & mutation
 		Random rand = new Random();
-		Individu newIndividu = null;
+		IIndividu newIndividu = null;
 		for(int i = 0; i < this.selectionParent.getNombreEnfant(); i++) {
 			//2 parents aléatoire dans l'array
-			Individu i1 = parents[rand.nextInt(parents.length)];
-			Individu i2 = parents[rand.nextInt(parents.length)];
+			IIndividu i1 = parents[rand.nextInt(parents.length)];
+			IIndividu i2 = parents[rand.nextInt(parents.length)];
 			newIndividu = i1.croisement(i2);
 			newIndividu.evaluate();
 
@@ -140,9 +140,9 @@ public class AlgorithmeGenetique implements IAlgorithmeGenetique {
 	}
 
 	@Override
-	public void remplacerIndividu(Individu newIndividu) {
+	public void remplacerIndividu(IIndividu newIndividu) {
 
-		Individu individuARemplacer = this.remplacementIndividu.getIndividuARemplacer(this.population);
+		IIndividu individuARemplacer = this.remplacementIndividu.getIndividuARemplacer(this.population);
 		this.population.remplacerIndividu(individuARemplacer, newIndividu);
 	}
 
@@ -177,7 +177,7 @@ public class AlgorithmeGenetique implements IAlgorithmeGenetique {
 	}
 
 	@Override
-	public Individu call() throws Exception {
+	public IIndividu call() throws Exception {
 		synchronized(this) {
 
 			if(this.critereArret.algorithmShouldStop(population)) {

@@ -1,6 +1,6 @@
 package remplacementIndividu;
 
-import modeles.Individu;
+import modeles.IIndividu;
 import modeles.Population;
 
 /**
@@ -10,9 +10,9 @@ import modeles.Population;
 public class RemplacementMoindreIndividu implements IRemplacementIndividu {
 
 	@Override
-	public Individu getIndividuARemplacer(Population pop) {
-		Individu individu = pop.getIndividu(0);
-		for(Individu ind : pop.getIndividus()) {
+	public IIndividu getIndividuARemplacer(Population pop) {
+		IIndividu individu = pop.getIndividu(0);
+		for(IIndividu ind : pop.getIndividus()) {
 			if(ind.getFitness() < individu.getFitness()) {
 				individu = ind;
 			}

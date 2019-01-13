@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.Test;
 
-import modeles.Individu;
+import modeles.IIndividu;
 import modeles.Population;
 import userClasses.TestIndividu;
 
@@ -13,7 +13,7 @@ public class PopulationGenerationTest {
 	private Population population; 
 	
 	public PopulationGenerationTest() {
-		Individu ind = new TestIndividu();
+		IIndividu ind = new TestIndividu();
 		population = new Population(30, ind);
 	}
 	
