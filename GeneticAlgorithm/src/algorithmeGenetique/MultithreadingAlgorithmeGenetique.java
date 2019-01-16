@@ -16,14 +16,14 @@ import modeles.Resultat;
  * Lancement de plusieurs AlgorithmeGenetique identique sur plusieurs thread
  * avec partage des meilleurs individus à chaque itération
  */
-public class MultithradingAlgorithmeGenetique {
+public class MultithreadingAlgorithmeGenetique {
 
-	private int mNombreThread;
-	private AlgorithmeGenetique mAlgorithme;
+	private int nombreThread;
+	private IAlgorithmeGenetique algorithme;
 
-	public MultithradingAlgorithmeGenetique(int nombreThread, AlgorithmeGenetique algorithmeGenetique) {
-		this.mNombreThread = nombreThread;
-		this.mAlgorithme = algorithmeGenetique;
+	public MultithreadingAlgorithmeGenetique(int nombreThread, IAlgorithmeGenetique algorithmeGenetique) {
+		this.nombreThread = nombreThread;
+		this.algorithme = algorithmeGenetique;
 	}
 
 	/**
@@ -35,13 +35,13 @@ public class MultithradingAlgorithmeGenetique {
 		
 		//1. Création des algorithmes
 		List<Callable<IIndividu>> workers = new ArrayList<>();
-		for(int i = 0; i < this.mNombreThread; i++) {
+		for(int i = 0; i < this.nombreThread; i++) {
 			try {
-				Callable<IIndividu> worker = this.mAlgorithme.clone();
+				Callable<IIndividu> worker = this.algorithme.clone();
 				
 				//Démarrer le compteur de temps si le critère d'arrêt est sur la durée
-				if (((AlgorithmeGenetique) worker).getCritereArret() instanceof ArretDuree) {
-					AlgorithmeGenetique ag = ((AlgorithmeGenetique) worker);
+				if (((IAlgorithmeGenetique) worker).getCritereArret() instanceof ArretDuree) {
+					IAlgorithmeGenetique ag = ((IAlgorithmeGenetique) worker);
 					((ArretDuree) ag.getCritereArret()).startCompteur();
 				}
 				
@@ -54,11 +54,11 @@ public class MultithradingAlgorithmeGenetique {
 		
 		//Tant que les conditions d'arrêt de tous les algorithmes ne sont pas finis, on continue de faire
 		//des itérations dans ceux encore en exécutions
-		ExecutorService executor = Executors.newFixedThreadPool(this.mNombreThread);
+		ExecutorService executor = Executors.newFixedThreadPool(this.nombreThread);
 		while(!AllAlgorithmHasFInished(workers)) {
 			IIndividu topInd = null;
 			Callable<IIndividu> topAG = null;
-			for (int i = 0; i < this.mNombreThread; i++) {
+			for (int i = 0; i < this.nombreThread; i++) {
 				
 				if(((AlgorithmeGenetique) workers.get(i)).isRunning()){
 					Future<IIndividu> ind = executor.submit(workers.get(i));
@@ -78,7 +78,7 @@ public class MultithradingAlgorithmeGenetique {
 			//Partage du meilleur individu issue des algorithmes entre tous les algorithmes
 			for(Callable<IIndividu> ag : workers) {
 				if(ag != topAG) {
-					((AlgorithmeGenetique) ag).remplacerIndividu(topInd);
+					((IAlgorithmeGenetique) ag).remplacerIndividu(topInd);
 				}
 			}
 		}
@@ -104,7 +104,7 @@ public class MultithradingAlgorithmeGenetique {
 	 * @return boolean
 	 */
 	private boolean AllAlgorithmHasFInished(List<Callable<IIndividu>> algos) {
-		for(Callable<IIndividu> ag : algos) if(((AlgorithmeGenetique) ag).isRunning()) {
+		for(Callable<IIndividu> ag : algos) if(((IAlgorithmeGenetique) ag).isRunning()) {
 			return false;
 		}
 
@@ -120,7 +120,7 @@ public class MultithradingAlgorithmeGenetique {
 		IIndividu solution = null;
 		
 		for(Callable<IIndividu> ag : workers) {
-			IIndividu topInd = ((AlgorithmeGenetique) ag).getPopulation().getTopIndividu();
+			IIndividu topInd = ((IAlgorithmeGenetique) ag).getPopulation().getTopIndividu();
 			if(solution == null || solution.getFitness() < topInd.getFitness()) {
 				solution = topInd;
 			}
@@ -138,8 +138,8 @@ public class MultithradingAlgorithmeGenetique {
 		int maxIteration = 0;
 		
 		for(Callable<IIndividu> ag : workers) {
-			if(maxIteration < ((AlgorithmeGenetique) ag).getNombreIteration()) {
-				maxIteration = ((AlgorithmeGenetique) ag).getNombreIteration();
+			if(maxIteration < ((IAlgorithmeGenetique) ag).getNombreIteration()) {
+				maxIteration = ((IAlgorithmeGenetique) ag).getNombreIteration();
 			}
 		}
 		

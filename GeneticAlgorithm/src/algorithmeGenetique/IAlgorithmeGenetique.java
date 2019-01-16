@@ -72,4 +72,10 @@ public interface IAlgorithmeGenetique extends Callable<IIndividu>, Cloneable {
 	 * @param nombreThread Nombre d'évaluation a effectuer en parallèle
 	 */
 	void setNombreThreadEvaluation(int nombreThread);
+
+	/**
+	 * 
+	 * @return L'algorithme est en train de s'exécuter ou npn
+	 */
+	boolean isRunning();
 }

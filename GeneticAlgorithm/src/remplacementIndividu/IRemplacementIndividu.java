@@ -11,7 +11,6 @@ import modeles.Population;
 public interface IRemplacementIndividu {
 	
 	/**
-	 * 
 	 * @param population
 	 * @return Individu qui sera à remplacer
 	 */

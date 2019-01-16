@@ -8,12 +8,12 @@ import modeles.Population;
  */
 public class ArretEvolutionPopulation implements ICritereArret {
 
-	private Population mOldPopulation;
-	private int mIterationMax;
-	private int mCurrentIteration;
+	private Population oldPopulation;
+	private int iterationMax;
+	private int currentIteration;
 
 	public ArretEvolutionPopulation(int iterationMax) {
-		this.mIterationMax = iterationMax;
+		this.iterationMax = iterationMax;
 	}
 
 	/* Si la population reste identique durant X itération, retourne true
@@ -23,19 +23,19 @@ public class ArretEvolutionPopulation implements ICritereArret {
 	@Override
 	public boolean algorithmShouldStop(Population population) {	
 		
-		if(this.mOldPopulation == null)
-			this.mOldPopulation = population;
+		if(this.oldPopulation == null)
+			this.oldPopulation = population;
 
 
-		if(this.mOldPopulation.equals(population)) {
-			this.mCurrentIteration++;
-			if(this.mCurrentIteration > this.mIterationMax) {
+		if(this.oldPopulation.equals(population)) {
+			this.currentIteration++;
+			if(this.currentIteration > this.iterationMax) {
 				return true;
 			}
 		}
 		else {
-			this.mCurrentIteration = 0;
-			this.mOldPopulation = null;
+			this.currentIteration = 0;
+			this.oldPopulation = null;
 		}
 
 		return false;
@@ -43,7 +43,7 @@ public class ArretEvolutionPopulation implements ICritereArret {
 
 	@Override
 	public ICritereArret clone() {
-		return new ArretEvolutionPopulation(this.mIterationMax);
+		return new ArretEvolutionPopulation(this.iterationMax);
 	}
 
 }

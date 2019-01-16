@@ -9,25 +9,25 @@ import modeles.Population;
  */
 public class ArretIteration implements ICritereArret {
 
-	private int mIterationMax;
-	private int mCurrentIteration;
+	private int iterationMax;
+	private int currentIteration;
 
 	public ArretIteration(int iterationMax) {
-		this.mIterationMax = iterationMax;
+		this.iterationMax = iterationMax;
 	}
 
 	
 	@Override
 	public boolean algorithmShouldStop(Population pop) {
-		this.mCurrentIteration++;
-		if(this.mCurrentIteration > this.mIterationMax) return true;
+		this.currentIteration++;
+		if(this.currentIteration > this.iterationMax) return true;
 
 		return false;
 	}
 
 	@Override
 	public ICritereArret clone() {
-		return new ArretIteration(this.mIterationMax);
+		return new ArretIteration(this.iterationMax);
 	}
 
 }

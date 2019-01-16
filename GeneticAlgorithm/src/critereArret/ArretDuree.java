@@ -8,19 +8,19 @@ import modeles.Population;
  */
 public class ArretDuree implements ICritereArret, Runnable {
 
-	private int mTime;
-	private int mCurrentTime;
+	private int time;
+	private int currentTime;
 
 	public ArretDuree(int timeInSecond) {
-		this.mTime = timeInSecond;
-		this.mCurrentTime = 0;
+		this.time = timeInSecond;
+		this.currentTime = 0;
 
 
 	}
 
 	@Override
 	public boolean algorithmShouldStop(Population pop) {
-		if(this.mCurrentTime >= this.mTime) return true;
+		if(this.currentTime >= this.time) return true;
 		return false;
 	}
 
@@ -32,7 +32,7 @@ public class ArretDuree implements ICritereArret, Runnable {
 		while(!algorithmShouldStop(null)) {
 			try {
 				Thread.sleep(1000);
-				this.mCurrentTime += 1;
+				this.currentTime += 1;
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -51,7 +51,7 @@ public class ArretDuree implements ICritereArret, Runnable {
 
 	@Override
 	public ICritereArret clone() {
-		return new ArretDuree(this.mTime);
+		return new ArretDuree(this.time);
 	}
 
 

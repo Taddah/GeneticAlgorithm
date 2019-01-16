@@ -10,18 +10,18 @@ import java.util.List;
  */
 public class Population {
 	
-	private int mPopulationSize;
-	private List<IIndividu> mIndividus;
+	private int populationSize;
+	private List<IIndividu> individus;
 
 	public Population(int populationSize, IIndividu individu) {
-		this.mPopulationSize = populationSize;
-		this.mIndividus = new ArrayList<>();
+		this.populationSize = populationSize;
+		this.individus = new ArrayList<>();
 		
 		//Constuire la population
-		for(int i = 0; i < this.mPopulationSize; i++) {
+		for(int i = 0; i < this.populationSize; i++) {
 			
 			IIndividu newIndividu = individu.genererIndividu();
-			mIndividus.add(newIndividu);
+			individus.add(newIndividu);
 		}
 		
 	}
@@ -34,29 +34,29 @@ public class Population {
 	public boolean isPopulationDiversified() {
 		int sameIndividu = 0;
 		
-		for(int i = 0; i < this.mPopulationSize - 1; i++) {
-			if(this.mIndividus.get(i).equals(this.mIndividus.get(i+1))) sameIndividu++;;
+		for(int i = 0; i < this.populationSize - 1; i++) {
+			if(this.individus.get(i).equals(this.individus.get(i+1))) sameIndividu++;;
 		}
 		
-		if(sameIndividu > (this.mPopulationSize / 3)) return false;
+		if(sameIndividu > (this.populationSize / 3)) return false;
 		
 		return true;
 	}
 
 	public IIndividu getIndividu(int index) {
-		return this.mIndividus.get(index);
+		return this.individus.get(index);
 	}
 	
 	public int getPopulationSize() {
-		return this.mPopulationSize;
+		return this.populationSize;
 	}
 
 	public List<IIndividu> getIndividus() {
-		return this.mIndividus;
+		return this.individus;
 	}
 	
 	public void remplacerIndividu(IIndividu oldIndividu, IIndividu newIndividu) {
-		if(!this.mIndividus.contains(oldIndividu)) {
+		if(!this.individus.contains(oldIndividu)) {
 			try {
 				throw new Exception("Erreur : impossible de remplacer l'individu (inexistant");
 			} catch (Exception e) {
@@ -65,8 +65,8 @@ public class Population {
 			}
 		}
 		
-		this.mIndividus.remove(oldIndividu);
-		this.mIndividus.add(newIndividu);
+		this.individus.remove(oldIndividu);
+		this.individus.add(newIndividu);
 	}
 	
 	/**

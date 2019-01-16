@@ -12,21 +12,21 @@ import modeles.Population;
  */
 public class SelectionParentsAleatoire implements ISelectionParents {
 
-	private int mNombreEnfants;
+	private int nombreEnfants;
 	
 	public SelectionParentsAleatoire(int nombreEnfant) {
-		this.mNombreEnfants = nombreEnfant;
+		this.nombreEnfants = nombreEnfant;
 	}
 	
 	@Override
 	public IIndividu[] selectionnerParents(Population p) {
 		
 		
-		IIndividu[] parents = new IIndividu[mNombreEnfants + 1];
+		IIndividu[] parents = new IIndividu[nombreEnfants + 1];
 		Random rand = new Random();
 		List<IIndividu> populationCopy = new ArrayList<>(p.getIndividus());
 		
-		for(int i = 0; i < mNombreEnfants + 1; i++) {
+		for(int i = 0; i < nombreEnfants + 1; i++) {
 			int individuSelected = rand.nextInt(populationCopy.size());
 			parents[i] = populationCopy.get(individuSelected);
 			populationCopy.remove(individuSelected);
@@ -37,12 +37,12 @@ public class SelectionParentsAleatoire implements ISelectionParents {
 	
 	@Override 
 	public int getNombreEnfant() {
-		return this.mNombreEnfants;
+		return this.nombreEnfants;
 	}
 
 	@Override
 	public void setNombreEnfant(int nbEnfant) {
-		this.mNombreEnfants = nbEnfant;
+		this.nombreEnfants = nbEnfant;
 		
 	}
 

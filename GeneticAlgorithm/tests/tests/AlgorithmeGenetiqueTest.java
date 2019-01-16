@@ -8,11 +8,9 @@ import java.util.logging.Logger;
 import org.junit.Test;
 
 import algorithmeGenetique.AlgorithmeGenetique;
-import algorithmeGenetique.MultithradingAlgorithmeGenetique;
+import algorithmeGenetique.MultithreadingAlgorithmeGenetique;
 import critereArret.ArretDuree;
-import critereArret.ArretEvolutionPopulation;
 import critereArret.ArretIteration;
-import critereArret.ArretMeilleurIndividuReste;
 import critereArret.ICritereArret;
 import modeles.IIndividu;
 import modeles.Resultat;
@@ -31,12 +29,12 @@ public class AlgorithmeGenetiqueTest {
 		IIndividu ind = new TestIndividu();
 		ISelectionParents selectionParent = new SelectionParentsMeilleurs(9);
 		IRemplacementIndividu remplacementIndividu = new RemplacementMoindreIndividu();
-		ICritereArret critereArret = new ArretIteration(1);
+		ICritereArret critereArret = new ArretDuree(10);
 
 		AlgorithmeGenetique ag = new AlgorithmeGenetique(10, ind, selectionParent, remplacementIndividu, critereArret);
-		ag.setNombreThreadEvaluation(5);
+		ag.setNombreThreadEvaluation(50);
 
-		MultithradingAlgorithmeGenetique mag = new MultithradingAlgorithmeGenetique(1, ag);
+		MultithreadingAlgorithmeGenetique mag = new MultithreadingAlgorithmeGenetique(100, ag);
 		
 		logger.log(Level.INFO, "Démarrage des algorithmes");
 		Resultat res = mag.startThreads();

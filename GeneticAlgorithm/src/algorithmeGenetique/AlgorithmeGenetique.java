@@ -32,6 +32,10 @@ public class AlgorithmeGenetique implements IAlgorithmeGenetique {
 	 */
 	public static int NOMBRE_THREAD_EVALUATION = 1;
 
+	
+	/*
+	 * Déterminée par l'utilisateur
+	 */
 	private int taillePopulation;
 	private IIndividu individu;
 	private ISelectionParents selectionParent;

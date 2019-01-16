@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.Test;
 
 import algorithmeGenetique.AlgorithmeGenetique;
-import algorithmeGenetique.MultithradingAlgorithmeGenetique;
+import algorithmeGenetique.MultithreadingAlgorithmeGenetique;
 import critereArret.ArretIteration;
 import critereArret.ICritereArret;
 import modeles.IIndividu;
@@ -31,7 +31,7 @@ public class CritereNombreIterationTest {
 
 		AlgorithmeGenetique ag = new AlgorithmeGenetique(50, ind, selectionParent, remplacementIndividu, critereArret);
 
-		MultithradingAlgorithmeGenetique mag = new MultithradingAlgorithmeGenetique(3, ag);
+		MultithreadingAlgorithmeGenetique mag = new MultithreadingAlgorithmeGenetique(3, ag);
 		Resultat res = mag.startThreads();
 
 		assertEquals(true, res.getNombreIteration() == 3 , "Critère d'arrêt sur le nombre d'itération non fonctionnel");

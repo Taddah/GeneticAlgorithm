@@ -10,11 +10,11 @@ import modeles.Population;
 public class ArretMeilleurIndividuReste implements ICritereArret {
 
 	private IIndividu currentBestIndividu;
-	private int mIterationMax;
-	private int mCurrentIteration;
+	private int iterationMax;
+	private int currentIteration;
 
 	public ArretMeilleurIndividuReste(int maxIteration) {
-		this.mIterationMax = maxIteration;
+		this.iterationMax = maxIteration;
 	}
 
 	@Override
@@ -32,13 +32,13 @@ public class ArretMeilleurIndividuReste implements ICritereArret {
 		}
 		else {
 			if(this.currentBestIndividu.getFitness() == newBestIndividu.getFitness()) {
-				this.mCurrentIteration++;
-				if(this.mCurrentIteration >= this.mIterationMax) {
+				this.currentIteration++;
+				if(this.currentIteration >= this.iterationMax) {
 					return true;
 				}
 			}
 			else {
-				this.mCurrentIteration = 0;
+				this.currentIteration = 0;
 			}
 		}
 		return false;
@@ -46,7 +46,7 @@ public class ArretMeilleurIndividuReste implements ICritereArret {
 
 	@Override
 	public ICritereArret clone()  {
-		return new ArretMeilleurIndividuReste(this.mIterationMax);
+		return new ArretMeilleurIndividuReste(this.iterationMax);
 	}
 
 }
