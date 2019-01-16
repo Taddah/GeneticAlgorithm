@@ -1,4 +1,4 @@
-package selectionParents;
+package selection_parents;
 
 import modeles.IIndividu;
 import modeles.Population;

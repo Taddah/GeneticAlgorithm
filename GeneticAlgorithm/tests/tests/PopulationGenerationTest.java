@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import modeles.IIndividu;
 import modeles.Population;
-import userClasses.TestIndividu;
+import user_classes.TestIndividu;
 
 public class PopulationGenerationTest {
 

@@ -1,8 +1,12 @@
 package tests;
 
+import java.util.logging.Level;
+
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
+
+import debug.DebugLogger;
 
 public class TestRunner {
 
@@ -14,10 +18,10 @@ public class TestRunner {
 				CritereNombreIterationTest.class,
 				AlgorithmeGenetiqueTest.class);	
 		
-		for (Failure failure : result.getFailures()) {							
-			System.out.println(failure.toString());	
+		for (Failure failure : result.getFailures()) {		
+			DebugLogger.getInstance().printLog(Level.INFO, failure.toString());
 		}
 
-		System.out.println("Result=="+result.wasSuccessful());	
+		DebugLogger.getInstance().printLog(Level.INFO, "Result=="+result.wasSuccessful());
 	}		
 }

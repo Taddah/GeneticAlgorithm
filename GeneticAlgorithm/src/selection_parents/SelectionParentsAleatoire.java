@@ -1,9 +1,13 @@
-package selectionParents;
+package selection_parents;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
 
+import debug.DebugLogger;
 import modeles.IIndividu;
 import modeles.Population;
 
@@ -13,9 +17,16 @@ import modeles.Population;
 public class SelectionParentsAleatoire implements ISelectionParents {
 
 	private int nombreEnfants;
+	private Random rand;
 	
 	public SelectionParentsAleatoire(int nombreEnfant) {
 		this.nombreEnfants = nombreEnfant;
+		
+		try {
+			this.rand = SecureRandom.getInstanceStrong();
+		} catch (NoSuchAlgorithmException e) {
+			DebugLogger.getInstance().printLog(Level.SEVERE, e.getMessage());
+		}
 	}
 	
 	@Override
@@ -23,11 +34,10 @@ public class SelectionParentsAleatoire implements ISelectionParents {
 		
 		
 		IIndividu[] parents = new IIndividu[nombreEnfants + 1];
-		Random rand = new Random();
 		List<IIndividu> populationCopy = new ArrayList<>(p.getIndividus());
 		
-		for(int i = 0; i < nombreEnfants + 1; i++) {
-			int individuSelected = rand.nextInt(populationCopy.size());
+		for(int i = 0; i < this.nombreEnfants + 1; i++) {
+			int individuSelected = this.rand.nextInt(populationCopy.size());
 			parents[i] = populationCopy.get(individuSelected);
 			populationCopy.remove(individuSelected);
 		}

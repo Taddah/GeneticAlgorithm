@@ -1,5 +1,7 @@
-package algorithmeGenetique;
+package algorithme_genetique;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -7,12 +9,15 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.logging.Level;
 
-import critereArret.ICritereArret;
+import critere_arret.ICritereArret;
+import debug.DebugLogger;
 import modeles.IIndividu;
 import modeles.Population;
-import remplacementIndividu.IRemplacementIndividu;
-import selectionParents.ISelectionParents;
+import multithreading.MultithreadingEvaluation;
+import remplacement_individu.IRemplacementIndividu;
+import selection_parents.ISelectionParents;
 
 /**
  * Algorithme génétique, gère une population  et ses individus en 
@@ -25,12 +30,12 @@ public class AlgorithmeGenetique implements IAlgorithmeGenetique {
 	/*
 	 * Probabilité de mutation par défaut (3)
 	 */
-	public static double DEFAULT_MUTATION_PROB = 3;
+	private double probabiliteMutationDefaut = 3;
 	
 	/*
 	 * Nombre de thread utilisé pour l'évaluation des individus
 	 */
-	public static int NOMBRE_THREAD_EVALUATION = 1;
+	private int nombreThreadEvaluation = 1;
 
 	
 	/*
@@ -45,6 +50,7 @@ public class AlgorithmeGenetique implements IAlgorithmeGenetique {
 	private int iterationActuelle;
 	private Population population;
 	private boolean algorithmIsRunning;
+	private Random rand;
 
 	public AlgorithmeGenetique(int taillePopulation, IIndividu ind, ISelectionParents selectionParents, IRemplacementIndividu remplacementIndividu, ICritereArret critereArret) {
 		this.taillePopulation = taillePopulation;
@@ -54,15 +60,20 @@ public class AlgorithmeGenetique implements IAlgorithmeGenetique {
 		this.critereArret = critereArret;
 		this.iterationActuelle = 0;
 		this.algorithmIsRunning = true;
+		
+		try {
+			this.rand = SecureRandom.getInstanceStrong();
+		} catch (NoSuchAlgorithmException e) {
+			DebugLogger.getInstance().printLog(Level.SEVERE, e.getMessage());
+		}
 
 		if(taillePopulation < this.selectionParent.getNombreEnfant()) {
 			//Si le nombre enfant ne respecte pas la contrainte, on le met à taillePopulation - 1
 			try {
 				this.selectionParent.setNombreEnfant(taillePopulation - 1);
-				throw new Exception("Erreur : Nombre d'enfant supérieur à la taille définie de la population (le nombre d'enfant a été mis à " + this.selectionParent.getNombreEnfant()+")");
+				DebugLogger.getInstance().printLog(Level.WARNING, "Erreur : Nombre d'enfant supérieur à la taille définie de la population (le nombre d'enfant a été mis à " + this.selectionParent.getNombreEnfant()+")");
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				DebugLogger.getInstance().printLog(Level.SEVERE, e.getMessage());
 			}
 		}
 		
@@ -83,10 +94,9 @@ public class AlgorithmeGenetique implements IAlgorithmeGenetique {
 			
 			if(tentative > 100) {
 				try {
-					throw new Exception("Impossible d'obtenir une population sufisamment diversifié, revoir la classe implémentant Individu.");
+					DebugLogger.getInstance().printLog(Level.SEVERE, "Impossible d'obtenir une population sufisamment diversifié, revoir la classe implémentant Individu.");
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					DebugLogger.getInstance().printLog(Level.SEVERE, e.getMessage());
 				}
 				System.exit(0);
 			}
@@ -96,27 +106,32 @@ public class AlgorithmeGenetique implements IAlgorithmeGenetique {
 	/* 
 	 * @see algorithmeGenetique.IAlgorithmeGenetique#iterer(modeles.Population)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Population iterer(Population population) {
 		iterationActuelle++;
 
 		//2 Evaluer chaque individu (partagé entre plusieurs thread)
-		ExecutorService exec = Executors.newFixedThreadPool(NOMBRE_THREAD_EVALUATION);
-		List<Future<?>> futures = new ArrayList<Future<?>>(population.getPopulationSize());
+		ExecutorService exec = Executors.newFixedThreadPool(nombreThreadEvaluation);
+		List<Future<MultithreadingEvaluation>> futures = new ArrayList<>(population.getPopulationSize());
+		
 		for (IIndividu item : population.getIndividus()) {
-			futures.add(exec.submit(new MultithreadingEvaluation(item)));
+			Future<?> task =  exec.submit(new MultithreadingEvaluation(item));
+			
+			if(task instanceof MultithreadingEvaluation) {
+				futures.add((Future<MultithreadingEvaluation>) task);
+			}
 		}
+		
 		for (Future<?> f : futures) {
 			try {
 				f.get();
-			} catch (InterruptedException e) {
-				System.err.println(e.getMessage());
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				System.err.println(e.getMessage());
-				e.printStackTrace();
-			} 
+			} catch (InterruptedException | ExecutionException e) {
+				DebugLogger.getInstance().printLog(Level.SEVERE, e.getMessage());
+				Thread.currentThread().interrupt();
+			}
 		}
+		
 		exec.shutdown();
 
 		//3 Selection des meilleurs parents
@@ -124,16 +139,15 @@ public class AlgorithmeGenetique implements IAlgorithmeGenetique {
 
 
 		//4 Croisement & mutation
-		Random rand = new Random();
 		IIndividu newIndividu = null;
 		for(int i = 0; i < this.selectionParent.getNombreEnfant(); i++) {
 			//2 parents aléatoire dans l'array
-			IIndividu i1 = parents[rand.nextInt(parents.length)];
-			IIndividu i2 = parents[rand.nextInt(parents.length)];
+			IIndividu i1 = parents[this.rand.nextInt(parents.length)];
+			IIndividu i2 = parents[this.rand.nextInt(parents.length)];
 			newIndividu = i1.croisement(i2);
-			newIndividu.evaluate();
+			newIndividu.evaluer();
 
-			if(rand.nextInt(100) <= DEFAULT_MUTATION_PROB) {
+			if(this.rand.nextInt(100) <= probabiliteMutationDefaut) {
 				newIndividu.mutation();
 			}
 
@@ -153,7 +167,7 @@ public class AlgorithmeGenetique implements IAlgorithmeGenetique {
 	@Override
 	public void setProbabiliteMutation(int probabilite) {
 		if(probabilite >= 0 && probabilite <= 100) {
-			DEFAULT_MUTATION_PROB = probabilite;
+			probabiliteMutationDefaut = probabilite;
 		}
 	}
 
@@ -165,11 +179,6 @@ public class AlgorithmeGenetique implements IAlgorithmeGenetique {
 	@Override
 	public int getNombreIteration() {
 		return this.iterationActuelle;
-	}
-
-	@Override
-	public AlgorithmeGenetique clone() throws CloneNotSupportedException {
-		return new AlgorithmeGenetique(taillePopulation, individu, selectionParent, remplacementIndividu, critereArret.clone());
 	}
 
 	/**
@@ -184,7 +193,7 @@ public class AlgorithmeGenetique implements IAlgorithmeGenetique {
 	public IIndividu call() throws Exception {
 		synchronized(this) {
 
-			if(this.critereArret.algorithmShouldStop(population)) {
+			if(this.critereArret.algorithmeDoitStopper(population)) {
 				this.algorithmIsRunning = false;
 			}else {
 				iterer(this.population);
@@ -202,6 +211,11 @@ public class AlgorithmeGenetique implements IAlgorithmeGenetique {
 	@Override
 	public void setNombreThreadEvaluation(int nombreThread) {
 		if(nombreThread > 0)
-			NOMBRE_THREAD_EVALUATION = nombreThread;
+			nombreThreadEvaluation = nombreThread;
+	}
+
+	@Override
+	public IAlgorithmeGenetique copie() {
+		return new AlgorithmeGenetique(taillePopulation, individu, selectionParent, remplacementIndividu, critereArret.copie());
 	}
 }

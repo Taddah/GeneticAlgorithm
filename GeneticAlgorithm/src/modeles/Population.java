@@ -2,6 +2,9 @@ package modeles;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+
+import debug.DebugLogger;
 
 /**
  * Une population est une liste d'individu
@@ -9,6 +12,9 @@ import java.util.List;
  *
  */
 public class Population {
+	
+	// Par défaut, au moins 2/3 des individus doivent être "unique"
+	public static final int MINIMUM_DIVERSIFICATION_POPULATION = 3; 
 	
 	private int populationSize;
 	private List<IIndividu> individus;
@@ -33,14 +39,19 @@ public class Population {
 	 */
 	public boolean isPopulationDiversified() {
 		int sameIndividu = 0;
+		boolean resultat = true;
 		
 		for(int i = 0; i < this.populationSize - 1; i++) {
-			if(this.individus.get(i).equals(this.individus.get(i+1))) sameIndividu++;;
+			if(this.individus.get(i).equals(this.individus.get(i+1))) {
+				sameIndividu++;
+			}
 		}
 		
-		if(sameIndividu > (this.populationSize / 3)) return false;
+		if(sameIndividu > (this.populationSize / MINIMUM_DIVERSIFICATION_POPULATION)) {
+			resultat = false;
+		}
 		
-		return true;
+		return resultat;
 	}
 
 	public IIndividu getIndividu(int index) {
@@ -58,10 +69,10 @@ public class Population {
 	public void remplacerIndividu(IIndividu oldIndividu, IIndividu newIndividu) {
 		if(!this.individus.contains(oldIndividu)) {
 			try {
-				throw new Exception("Erreur : impossible de remplacer l'individu (inexistant");
+				DebugLogger.getInstance().printLog(Level.SEVERE, "Erreur : impossible de remplacer l'individu (inexistant");
+				Thread.currentThread().interrupt();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				DebugLogger.getInstance().printLog(Level.SEVERE, e.getMessage());
 			}
 		}
 		
@@ -98,5 +109,10 @@ public class Population {
 		}
 		
 		return true;
+	}
+	
+	@Override
+	public int hashCode() {
+		return super.hashCode();
 	}
 }

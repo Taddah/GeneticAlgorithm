@@ -1,4 +1,4 @@
-package algorithmeGenetique;
+package multithreading;
 
 import modeles.IIndividu;
 
@@ -18,7 +18,7 @@ public class MultithreadingEvaluation implements Runnable {
 
 	@Override
 	public void run() {
-		this.individu.evaluate();
+		this.individu.evaluer();
 	}
 
 }

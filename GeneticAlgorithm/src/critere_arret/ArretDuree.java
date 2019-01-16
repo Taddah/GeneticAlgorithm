@@ -1,5 +1,8 @@
-package critereArret;
+package critere_arret;
 
+import java.util.logging.Level;
+
+import debug.DebugLogger;
 import modeles.Population;
 
 /**
@@ -19,9 +22,10 @@ public class ArretDuree implements ICritereArret, Runnable {
 	}
 
 	@Override
-	public boolean algorithmShouldStop(Population pop) {
-		if(this.currentTime >= this.time) return true;
-		return false;
+	public boolean algorithmeDoitStopper(Population pop) {
+		boolean resultat = false;
+		if(this.currentTime >= this.time) resultat = true;
+		return resultat;
 	}
 
 	/**
@@ -29,13 +33,13 @@ public class ArretDuree implements ICritereArret, Runnable {
 	 */
 	@Override
 	public void run() {
-		while(!algorithmShouldStop(null)) {
+		while(!algorithmeDoitStopper(null)) {
 			try {
 				Thread.sleep(1000);
 				this.currentTime += 1;
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				DebugLogger.getInstance().printLog(Level.SEVERE, e.getMessage());
+				Thread.currentThread().interrupt();
 			}
 		}
 	}
@@ -48,9 +52,8 @@ public class ArretDuree implements ICritereArret, Runnable {
 		t.start();
 	}
 
-
 	@Override
-	public ICritereArret clone() {
+	public ICritereArret copie() {
 		return new ArretDuree(this.time);
 	}
 

@@ -7,37 +7,34 @@ import java.util.logging.Logger;
 
 import org.junit.Test;
 
-import algorithmeGenetique.AlgorithmeGenetique;
-import algorithmeGenetique.MultithreadingAlgorithmeGenetique;
-import critereArret.ArretDuree;
-import critereArret.ArretIteration;
-import critereArret.ICritereArret;
+import algorithme_genetique.AlgorithmeGenetique;
+import critere_arret.ArretDuree;
+import critere_arret.ICritereArret;
 import modeles.IIndividu;
 import modeles.Resultat;
-import remplacementIndividu.IRemplacementIndividu;
-import remplacementIndividu.RemplacementMoindreIndividu;
-import selectionParents.ISelectionParents;
-import selectionParents.SelectionParentsMeilleurs;
-import userClasses.TestIndividu;
+import multithreading.MultithreadingAlgorithmeGenetique;
+import remplacement_individu.IRemplacementIndividu;
+import remplacement_individu.RemplacementMoindreIndividu;
+import selection_parents.ISelectionParents;
+import selection_parents.SelectionParentsMeilleurs;
+import user_classes.TestIndividu;
 
 public class AlgorithmeGenetiqueTest {
 
 	@Test
-	public void test() {
+	public void testAlgorithme() {
 		Logger logger = Logger.getLogger("logger");
 
 		IIndividu ind = new TestIndividu();
-		ISelectionParents selectionParent = new SelectionParentsMeilleurs(9);
+		ISelectionParents selectionParent = new SelectionParentsMeilleurs(90);
 		IRemplacementIndividu remplacementIndividu = new RemplacementMoindreIndividu();
-		ICritereArret critereArret = new ArretDuree(10);
+		ICritereArret critereArret = new ArretDuree(20);
 
-		AlgorithmeGenetique ag = new AlgorithmeGenetique(10, ind, selectionParent, remplacementIndividu, critereArret);
-		ag.setNombreThreadEvaluation(50);
-
-		MultithreadingAlgorithmeGenetique mag = new MultithreadingAlgorithmeGenetique(100, ag);
+		MultithreadingAlgorithmeGenetique mag = new MultithreadingAlgorithmeGenetique(3, 100, ind, selectionParent, remplacementIndividu, critereArret);
+		mag.setNombreThreadEvaluation(5);
 		
 		logger.log(Level.INFO, "Démarrage des algorithmes");
-		Resultat res = mag.startThreads();
+		Resultat res = mag.lancerAlgorithmes();
 
 		logger.log(Level.INFO, "Résultat");
 		System.out.println("Solution : " + res.getSolution());

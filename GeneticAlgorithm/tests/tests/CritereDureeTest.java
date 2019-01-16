@@ -4,17 +4,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.Test;
 
-import algorithmeGenetique.AlgorithmeGenetique;
-import algorithmeGenetique.MultithreadingAlgorithmeGenetique;
-import critereArret.ArretDuree;
-import critereArret.ICritereArret;
+import algorithme_genetique.AlgorithmeGenetique;
+import critere_arret.ArretDuree;
+import critere_arret.ICritereArret;
 import modeles.IIndividu;
 import modeles.Resultat;
-import remplacementIndividu.IRemplacementIndividu;
-import remplacementIndividu.RemplacementMoindreIndividu;
-import selectionParents.ISelectionParents;
-import selectionParents.SelectionParentsMeilleurs;
-import userClasses.TestIndividu;
+import multithreading.MultithreadingAlgorithmeGenetique;
+import remplacement_individu.IRemplacementIndividu;
+import remplacement_individu.RemplacementMoindreIndividu;
+import selection_parents.ISelectionParents;
+import selection_parents.SelectionParentsMeilleurs;
+import user_classes.TestIndividu;
 
 public class CritereDureeTest {
 
@@ -32,7 +32,7 @@ public class CritereDureeTest {
 		AlgorithmeGenetique ag = new AlgorithmeGenetique(50, ind, selectionParent, remplacementIndividu, critereArret);
 
 		MultithreadingAlgorithmeGenetique mag = new MultithreadingAlgorithmeGenetique(3, ag);
-		Resultat res = mag.startThreads();
+		Resultat res = mag.lancerAlgorithmes();
 
 		assertEquals(true, res.getTempsExecution() > 3 && res.getTempsExecution() < 3.1, "Critère d'arrêt sur la durée non fonctionnel");
 	}

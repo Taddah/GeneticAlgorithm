@@ -1,4 +1,4 @@
-package critereArret;
+package critere_arret;
 
 import modeles.IIndividu;
 import modeles.Population;
@@ -18,7 +18,7 @@ public class ArretMeilleurIndividuReste implements ICritereArret {
 	}
 
 	@Override
-	public boolean algorithmShouldStop(Population population) {
+	public boolean algorithmeDoitStopper(Population population) {
 
 		IIndividu newBestIndividu = population.getTopIndividu();
 
@@ -45,7 +45,7 @@ public class ArretMeilleurIndividuReste implements ICritereArret {
 	}
 
 	@Override
-	public ICritereArret clone()  {
+	public ICritereArret copie() {
 		return new ArretMeilleurIndividuReste(this.iterationMax);
 	}
 

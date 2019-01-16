@@ -1,4 +1,4 @@
-package critereArret;
+package critere_arret;
 
 import modeles.Population;
 
@@ -21,7 +21,7 @@ public class ArretEvolutionPopulation implements ICritereArret {
 	 * @see critereArret.ICritereArret#algorithmShouldStop(modeles.Population)
 	 */
 	@Override
-	public boolean algorithmShouldStop(Population population) {	
+	public boolean algorithmeDoitStopper(Population population) {	
 		
 		if(this.oldPopulation == null)
 			this.oldPopulation = population;
@@ -40,9 +40,9 @@ public class ArretEvolutionPopulation implements ICritereArret {
 
 		return false;
 	}
-
+	
 	@Override
-	public ICritereArret clone() {
+	public ICritereArret copie() {
 		return new ArretEvolutionPopulation(this.iterationMax);
 	}
 

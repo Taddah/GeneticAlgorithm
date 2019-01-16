@@ -1,4 +1,4 @@
-package remplacementIndividu;
+package remplacement_individu;
 
 import modeles.IIndividu;
 import modeles.Population;

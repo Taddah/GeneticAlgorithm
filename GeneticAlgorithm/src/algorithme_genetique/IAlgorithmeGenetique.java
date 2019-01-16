@@ -1,8 +1,9 @@
-package algorithmeGenetique;
+package algorithme_genetique;
 
 import java.util.concurrent.Callable;
 
-import critereArret.ICritereArret;
+import copiable.ICopiable;
+import critere_arret.ICritereArret;
 import modeles.IIndividu;
 import modeles.Population;
 
@@ -11,7 +12,7 @@ import modeles.Population;
  * Implémentation du design pattern Prototype afin de pouvoir cloner l'algorithme
  *
  */
-public interface IAlgorithmeGenetique extends Callable<IIndividu>, Cloneable {
+public interface IAlgorithmeGenetique extends Callable<IIndividu>, ICopiable<IAlgorithmeGenetique> {
 
 	/**
 	 * Fais une itération sur population
@@ -51,16 +52,8 @@ public interface IAlgorithmeGenetique extends Callable<IIndividu>, Cloneable {
 	 */
 	@Override 
 	default IIndividu call() throws Exception {
-		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	/**
-	 * Clonage de l'algorithme, utilisé pour en lancer plusieurs en même temps sur différent thread
-	 * @return AlgorithmeGenetique
-	 * @throws CloneNotSupportedException
-	 */
-	AlgorithmeGenetique clone() throws CloneNotSupportedException;
 	
 	/**
 	 * 
